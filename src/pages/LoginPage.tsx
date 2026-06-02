@@ -27,14 +27,14 @@ export function LoginPage() {
           </div>
         </div>
         <div className="login-copy">
-          <h1>Sign in to your onboarding workspace</h1>
+          <h1>Log in to explore your onboarding workspace</h1>
           <p>
             A platform that includes dashboards, progress tracking, questions,
             and everything you need during internship onboarding.
           </p>
         </div>
         <label className="field">
-          <span>Demo account</span>
+          <span>Account</span>
           <select
             value={selectedUser}
             onChange={(event) => setSelectedUser(event.target.value)}
@@ -64,7 +64,7 @@ export function LoginPage() {
           }}
         >
           <LogIn size={18} />
-          Sign in
+          Log in
         </button>
       </section>
       <section className="login-visual" aria-hidden="true">

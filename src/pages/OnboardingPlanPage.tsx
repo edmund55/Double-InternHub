@@ -17,7 +17,7 @@ export function OnboardingPlanPage() {
     <section className="page">
       <div className="page-heading">
         <div>
-          <span className="eyebrow">Onboarding plan</span>
+          <span className="eyebrow">Onboarding modules</span>
           <h1>Complete your setup modules</h1>
         </div>
         <ProgressBar value={progress.percent} label="Total completion" />
@@ -25,7 +25,9 @@ export function OnboardingPlanPage() {
 
       <div className="tool-grid">
         {steps.map((step) => {
-          const record = progress.records.find((item) => item.stepId === step.id)!;
+          const record = progress.records.find(
+            (item) => item.stepId === step.id,
+          )!;
           return (
             <article className="tool-card" key={step.id}>
               <img src={step.imageUrl} alt="" />
@@ -35,17 +37,31 @@ export function OnboardingPlanPage() {
                     <span className="eyebrow">{step.category}</span>
                     <h2>{step.title}</h2>
                   </div>
-                  <Badge label={record.status.replace("-", " ")} tone={progressTone[record.status]} />
+                  <Badge
+                    label={record.status.replace("-", " ")}
+                    tone={progressTone[record.status]}
+                  />
                 </div>
                 <p>{step.summary}</p>
                 <div className="inline-actions">
-                  <Link className="secondary-button" to={`/intern/onboarding/${step.id}`}>
+                  <Link
+                    className="secondary-button"
+                    to={`/intern/onboarding/${step.id}`}
+                  >
                     Learn
                     <ExternalLink size={16} />
                   </Link>
                   <button
                     className="primary-button"
-                    onClick={() => dispatch(markStepStatus({ internId: currentUserId, stepId: step.id, status: "done" }))}
+                    onClick={() =>
+                      dispatch(
+                        markStepStatus({
+                          internId: currentUserId,
+                          stepId: step.id,
+                          status: "done",
+                        }),
+                      )
+                    }
                   >
                     <Check size={16} />
                     Mark done

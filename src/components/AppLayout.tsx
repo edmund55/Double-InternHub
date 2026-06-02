@@ -33,7 +33,9 @@ export function AppLayout() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const currentUserId = useAppSelector((state) => state.auth.currentUserId);
-  const user = useAppSelector((state) => state.hub.users.find((item) => item.id === currentUserId));
+  const user = useAppSelector((state) =>
+    state.hub.users.find((item) => item.id === currentUserId),
+  );
 
   if (!user) return null;
   const nav = user.role === "intern" ? internNav : supervisorNav;
@@ -64,7 +66,7 @@ export function AppLayout() {
           }}
         >
           <LogOut size={18} />
-          <span>Sign out</span>
+          <span>Log out</span>
         </button>
       </aside>
 
@@ -79,7 +81,9 @@ export function AppLayout() {
               <img src={user.avatarUrl} alt="" />
               <div>
                 <strong>{user.name}</strong>
-                <span>{user.role === "intern" ? user.track : "Supervisor"}</span>
+                <span>
+                  {user.role === "intern" ? user.track : "Supervisor"}
+                </span>
               </div>
             </div>
           </div>
