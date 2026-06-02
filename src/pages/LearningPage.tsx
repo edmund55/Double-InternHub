@@ -49,7 +49,10 @@ export function LearningPage() {
           <h1>{step.title}</h1>
           <p>{step.summary}</p>
           <div className="inline-actions">
-            <Badge label={record.status.replace("-", " ")} tone={progressTone[record.status]} />
+            <Badge
+              label={record.status.replace("-", " ")}
+              tone={progressTone[record.status]}
+            />
             <span>{step.estimatedMinutes} min setup</span>
           </div>
         </div>
@@ -66,7 +69,11 @@ export function LearningPage() {
         </aside>
         <article className="learn-content">
           {learningSections.map((section, index) => (
-            <section id={section.id} key={section.id} className="instruction-section">
+            <section
+              id={section.id}
+              key={section.id}
+              className="instruction-section"
+            >
               <div className="instruction-section-head">
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <div>
@@ -74,7 +81,13 @@ export function LearningPage() {
                   <p>{section.body}</p>
                 </div>
               </div>
-              {section.imageUrl && <img className="instruction-image" src={section.imageUrl} alt="" />}
+              {section.imageUrl && (
+                <img
+                  className="instruction-image"
+                  src={section.imageUrl}
+                  alt=""
+                />
+              )}
               {section.documents && section.documents.length > 0 && (
                 <div className="doc-grid">
                   {section.documents.map((doc) => (
@@ -90,7 +103,11 @@ export function LearningPage() {
                 <div className="snippet" key={snippet.title}>
                   <div className="snippet-header">
                     <strong>{snippet.title}</strong>
-                    <button className="icon-button" aria-label="Copy snippet" onClick={() => void copySnippet(snippet.code)}>
+                    <button
+                      className="icon-button"
+                      aria-label="Copy snippet"
+                      onClick={() => void copySnippet(snippet.code)}
+                    >
                       <Copy size={16} />
                     </button>
                   </div>
@@ -106,7 +123,12 @@ export function LearningPage() {
             <h2>Useful links</h2>
             <div className="resource-list">
               {step.links.map((link) => (
-                <a key={link.url} href={link.url} target="_blank" rel="noreferrer">
+                <a
+                  key={link.url}
+                  href={link.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   {link.label}
                   <ExternalLink size={16} />
                 </a>
@@ -117,11 +139,21 @@ export function LearningPage() {
           <div className="completion-panel">
             <div>
               <strong>Finished this setup?</strong>
-              <span>Mark the module as done so your supervisor can track progress.</span>
+              <span>
+                Mark the module as done so your supervisor can track progress.
+              </span>
             </div>
             <button
               className="primary-button"
-              onClick={() => dispatch(markStepStatus({ internId: currentUserId, stepId: step.id, status: "done" }))}
+              onClick={() =>
+                dispatch(
+                  markStepStatus({
+                    internId: currentUserId,
+                    stepId: step.id,
+                    status: "done",
+                  }),
+                )
+              }
             >
               <Check size={18} />
               Mark as done

@@ -8,8 +8,13 @@ export function LoginPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const users = useAppSelector((state) => state.hub.users);
-  const [selectedUser, setSelectedUser] = useState(users[1]?.id ?? users[0]?.id ?? "");
-  const selected = useMemo(() => users.find((user) => user.id === selectedUser), [selectedUser, users]);
+  const [selectedUser, setSelectedUser] = useState(
+    users[1]?.id ?? users[0]?.id ?? "",
+  );
+  const selected = useMemo(
+    () => users.find((user) => user.id === selectedUser),
+    [selectedUser, users],
+  );
 
   return (
     <main className="login-page">
@@ -23,14 +28,21 @@ export function LoginPage() {
         </div>
         <div className="login-copy">
           <h1>Sign in to your onboarding workspace</h1>
-          <p>Use a seeded demo account to preview role-based dashboards, progress tracking, questions, and supervisor workflows.</p>
+          <p>
+            A platform that includes dashboards, progress tracking, questions,
+            and everything you need during internship onboarding.
+          </p>
         </div>
         <label className="field">
           <span>Demo account</span>
-          <select value={selectedUser} onChange={(event) => setSelectedUser(event.target.value)}>
+          <select
+            value={selectedUser}
+            onChange={(event) => setSelectedUser(event.target.value)}
+          >
             {users.map((user) => (
               <option key={user.id} value={user.id}>
-                {user.name} - {user.role === "intern" ? user.track : "Supervisor"}
+                {user.name} -{" "}
+                {user.role === "intern" ? user.track : "Supervisor"}
               </option>
             ))}
           </select>
@@ -59,7 +71,10 @@ export function LoginPage() {
         <div className="login-visual-content">
           <span>May 2026 cohort</span>
           <strong>7 setup modules</strong>
-          <p>Questions, announcements, progress reviews, and learning docs stay in one place.</p>
+          <p>
+            Questions, announcements, progress reviews, and learning docs stay
+            in one place.
+          </p>
         </div>
       </section>
     </main>

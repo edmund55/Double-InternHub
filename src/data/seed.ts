@@ -153,7 +153,10 @@ const rawOnboardingSteps: OnboardingStep[] = [
     ],
     links: [
       { label: "Slack", url: "https://slack.com/signin" },
-      { label: "Slack Keyboard Shortcuts", url: "https://slack.com/help/articles/201374536-Slack-keyboard-shortcuts" },
+      {
+        label: "Slack Keyboard Shortcuts",
+        url: "https://slack.com/help/articles/201374536-Slack-keyboard-shortcuts",
+      },
     ],
     codeSnippets: [
       {
@@ -193,13 +196,16 @@ const rawOnboardingSteps: OnboardingStep[] = [
     ],
     links: [
       { label: "GitLab", url: "https://gitlab.com" },
-      { label: "SSH Key Docs", url: "https://docs.gitlab.com/ee/user/ssh.html" },
+      {
+        label: "SSH Key Docs",
+        url: "https://docs.gitlab.com/ee/user/ssh.html",
+      },
     ],
     codeSnippets: [
       {
         title: "Create SSH key",
         language: "bash",
-        code: "ssh-keygen -t ed25519 -C \"your.email@double.my\"\ncat ~/.ssh/id_ed25519.pub",
+        code: 'ssh-keygen -t ed25519 -C "your.email@double.my"\ncat ~/.ssh/id_ed25519.pub',
       },
       {
         title: "Clone and branch",
@@ -237,7 +243,7 @@ const rawOnboardingSteps: OnboardingStep[] = [
       {
         title: "Git identity",
         language: "bash",
-        code: "git config --global user.name \"Your Name\"\ngit config --global user.email \"your.email@double.my\"",
+        code: 'git config --global user.name "Your Name"\ngit config --global user.email "your.email@double.my"',
       },
     ],
   },
@@ -271,7 +277,7 @@ const rawOnboardingSteps: OnboardingStep[] = [
       {
         title: "Recommended settings",
         language: "json",
-        code: "{\n  \"editor.formatOnSave\": true,\n  \"editor.defaultFormatter\": \"esbenp.prettier-vscode\",\n  \"typescript.tsdk\": \"node_modules/typescript/lib\"\n}",
+        code: '{\n  "editor.formatOnSave": true,\n  "editor.defaultFormatter": "esbenp.prettier-vscode",\n  "typescript.tsdk": "node_modules/typescript/lib"\n}',
       },
     ],
   },
@@ -314,32 +320,84 @@ const rawOnboardingSteps: OnboardingStep[] = [
   },
 ];
 
-export const onboardingSteps: OnboardingStep[] = rawOnboardingSteps.map((step) => ({
-  ...step,
-  instructionSections: step.instructions.map((instruction, index) => ({
-    id: `${step.id}-instruction-${index + 1}`,
-    title: instruction.replace(/\.$/, ""),
-    body: "Complete this action, then review any attached guide, command, screenshot, or policy note before moving on.",
-    imageUrl: index === 0 ? step.imageUrl : undefined,
-    documents: step.documents.filter((_, documentIndex) => documentIndex % step.instructions.length === index),
-    codeSnippets: step.codeSnippets.filter((_, snippetIndex) => snippetIndex % step.instructions.length === index),
-  })),
-}));
+export const onboardingSteps: OnboardingStep[] = rawOnboardingSteps.map(
+  (step) => ({
+    ...step,
+    instructionSections: step.instructions.map((instruction, index) => ({
+      id: `${step.id}-instruction-${index + 1}`,
+      title: instruction.replace(/\.$/, ""),
+      body: "Complete this action, then review any attached guide, command, screenshot, or policy note before moving on.",
+      imageUrl: index === 0 ? step.imageUrl : undefined,
+      documents: step.documents.filter(
+        (_, documentIndex) =>
+          documentIndex % step.instructions.length === index,
+      ),
+      codeSnippets: step.codeSnippets.filter(
+        (_, snippetIndex) => snippetIndex % step.instructions.length === index,
+      ),
+    })),
+  }),
+);
 
 export const progressRecords: ProgressRecord[] = [
-  { internId: "int-1", stepId: "hostinger-mail", status: "done", updatedAt: "2026-05-04T10:20:00+08:00" },
-  { internId: "int-1", stepId: "productive", status: "done", updatedAt: "2026-05-04T15:30:00+08:00" },
-  { internId: "int-1", stepId: "slack", status: "in-progress", updatedAt: "2026-05-05T09:05:00+08:00" },
+  {
+    internId: "int-1",
+    stepId: "hostinger-mail",
+    status: "done",
+    updatedAt: "2026-05-04T10:20:00+08:00",
+  },
+  {
+    internId: "int-1",
+    stepId: "productive",
+    status: "done",
+    updatedAt: "2026-05-04T15:30:00+08:00",
+  },
+  {
+    internId: "int-1",
+    stepId: "slack",
+    status: "in-progress",
+    updatedAt: "2026-05-05T09:05:00+08:00",
+  },
   { internId: "int-1", stepId: "gitlab", status: "not-started" },
   { internId: "int-1", stepId: "github-desktop", status: "not-started" },
-  { internId: "int-1", stepId: "vs-code", status: "in-progress", updatedAt: "2026-05-05T11:12:00+08:00" },
+  {
+    internId: "int-1",
+    stepId: "vs-code",
+    status: "in-progress",
+    updatedAt: "2026-05-05T11:12:00+08:00",
+  },
   { internId: "int-1", stepId: "kakitangan", status: "not-started" },
-  { internId: "int-2", stepId: "hostinger-mail", status: "done", updatedAt: "2026-05-04T10:40:00+08:00" },
-  { internId: "int-2", stepId: "productive", status: "in-progress", updatedAt: "2026-05-04T17:10:00+08:00" },
-  { internId: "int-2", stepId: "slack", status: "done", updatedAt: "2026-05-04T12:00:00+08:00" },
-  { internId: "int-2", stepId: "gitlab", status: "in-progress", updatedAt: "2026-05-05T10:00:00+08:00" },
+  {
+    internId: "int-2",
+    stepId: "hostinger-mail",
+    status: "done",
+    updatedAt: "2026-05-04T10:40:00+08:00",
+  },
+  {
+    internId: "int-2",
+    stepId: "productive",
+    status: "in-progress",
+    updatedAt: "2026-05-04T17:10:00+08:00",
+  },
+  {
+    internId: "int-2",
+    stepId: "slack",
+    status: "done",
+    updatedAt: "2026-05-04T12:00:00+08:00",
+  },
+  {
+    internId: "int-2",
+    stepId: "gitlab",
+    status: "in-progress",
+    updatedAt: "2026-05-05T10:00:00+08:00",
+  },
   { internId: "int-2", stepId: "github-desktop", status: "not-started" },
-  { internId: "int-2", stepId: "vs-code", status: "done", updatedAt: "2026-05-04T16:00:00+08:00" },
+  {
+    internId: "int-2",
+    stepId: "vs-code",
+    status: "done",
+    updatedAt: "2026-05-04T16:00:00+08:00",
+  },
   { internId: "int-2", stepId: "kakitangan", status: "not-started" },
   { internId: "int-3", stepId: "hostinger-mail", status: "not-started" },
   { internId: "int-3", stepId: "productive", status: "not-started" },
@@ -371,7 +429,8 @@ export const questions: Question[] = [
     id: "q-2",
     internId: "int-2",
     category: "GitLab",
-    description: "My SSH clone fails with permission denied after I added the key.",
+    description:
+      "My SSH clone fails with permission denied after I added the key.",
     createdAt: "2026-05-05T10:50:00+08:00",
     status: "open",
     replies: [],
@@ -383,19 +442,22 @@ export const faqs: FAQ[] = [
     id: "faq-1",
     category: "General",
     question: "What should I complete on day one?",
-    answer: "Finish Hostinger Mail, Slack, Productive, and the profile fields in Kakitangan first. Development tooling can continue into day two.",
+    answer:
+      "Finish Hostinger Mail, Slack, Productive, and the profile fields in Kakitangan first. Development tooling can continue into day two.",
   },
   {
     id: "faq-2",
     category: "Company policy",
     question: "How should I report a blocker?",
-    answer: "Ask in the InternHub Ask page, then add a concise note to the related Productive task if it affects your deadline.",
+    answer:
+      "Ask in the InternHub Ask page, then add a concise note to the related Productive task if it affects your deadline.",
   },
   {
     id: "faq-3",
     category: "GitLab",
     question: "Can I push directly to main?",
-    answer: "No. Create a branch, open a merge request, and wait for review before merging.",
+    answer:
+      "No. Create a branch, open a merge request, and wait for review before merging.",
   },
 ];
 
