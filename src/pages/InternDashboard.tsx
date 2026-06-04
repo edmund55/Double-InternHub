@@ -182,7 +182,9 @@ export function InternDashboard() {
                   <Badge label={question.category} tone="blue" />
                   <strong>{question.description}</strong>
                   <span>
-                    {formatDateTime(question.replies.at(-1)?.createdAt)}
+                    {formatDateTime(
+                      question.replies[question.replies.length - 1]?.createdAt,
+                    )}
                   </span>
                 </Link>
               ))}

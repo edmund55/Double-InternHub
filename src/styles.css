@@ -122,7 +122,7 @@ img {
 .question-card span,
 .announcement-card span,
 .mini-link span,
-.setup-row span,
+.setup-row > div span,
 .stat-card p,
 .field span,
 .muted {
@@ -393,12 +393,14 @@ img {
 .badge {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 26px;
   width: fit-content;
   padding: 0 9px;
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 800;
+  line-height: 1;
   text-transform: capitalize;
   white-space: nowrap;
 }
@@ -416,7 +418,6 @@ img {
 .badge-yellow {
   background: #ffe0a3;
   color: #5f3800;
-  border: 1px solid #d98b00;
 }
 
 .badge-red {
@@ -427,7 +428,6 @@ img {
 .badge-gray {
   background: #dce4e0;
   color: #25313b;
-  border: 1px solid #b7c3bd;
 }
 
 .primary-button,
@@ -497,6 +497,10 @@ img {
   gap: 12px;
 }
 
+.setup-list {
+  margin-top: 1rem;
+}
+
 .setup-row,
 .mini-link,
 .question-preview,
@@ -518,8 +522,8 @@ img {
   padding: 14px;
 }
 
-.setup-row strong,
-.setup-row span,
+.setup-row > div strong,
+.setup-row > div span,
 .mini-link strong,
 .mini-link span {
   display: block;
