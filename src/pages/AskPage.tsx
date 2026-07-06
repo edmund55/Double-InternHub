@@ -1,5 +1,6 @@
-import { Send } from "lucide-react";
+import { LoaderCircle, Send } from "lucide-react";
 import { FormEvent, useState } from "react";
+import toast from "react-hot-toast";
 import { Badge, questionTone } from "../components/Badge";
 import { askQuestion, closeQuestion } from "../store/hubSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -26,12 +27,20 @@ export function AskPage() {
   );
   const [category, setCategory] = useState<QuestionCategory>("Company policy");
   const [description, setDescription] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const canSubmit = description.trim().length > 0 && !isSubmitting;
 
   const submitQuestion = (event: FormEvent) => {
     event.preventDefault();
-    if (!description.trim()) return;
-    dispatch(askQuestion({ internId: currentUserId, category, description: description.trim() }));
-    setDescription("");
+    if (!canSubmit) return;
+    const trimmedDescription = description.trim();
+    setIsSubmitting(true);
+    window.setTimeout(() => {
+      dispatch(askQuestion({ internId: currentUserId, category, description: trimmedDescription }));
+      setDescription("");
+      setIsSubmitting(false);
+      toast.success("Question submitted");
+    }, 350);
   };
 
   return (
@@ -66,10 +75,22 @@ export function AskPage() {
               onChange={(event) => setDescription(event.target.value)}
               placeholder="Describe what you tried, what happened, and what you need help with."
             />
+            <small className="field-hint">
+              Include the tool name, what you already tried, and the result you expected.
+            </small>
           </label>
-          <button className="primary-button" type="submit">
-            <Send size={18} />
-            Submit question
+          <button className="primary-button" type="submit" disabled={!canSubmit}>
+            {isSubmitting ? (
+              <>
+                <LoaderCircle className="spin-icon" size={18} />
+                Submitting...
+              </>
+            ) : (
+              <>
+                <Send size={18} />
+                Submit question
+              </>
+            )}
           </button>
         </form>
 
@@ -79,6 +100,15 @@ export function AskPage() {
             <Badge label={`${questions.length} total`} tone="blue" />
           </div>
           <div className="question-list">
+            {questions.length === 0 && (
+              <div className="empty-state empty-state-large">
+                <Send size={24} />
+                <strong>No questions yet</strong>
+                <span>
+                  Ask your first setup question here. Supervisor replies will stay in this history.
+                </span>
+              </div>
+            )}
             {questions.map((question) => (
               <div className={`question-card question-card-${question.status}`} key={question.id}>
                 <div className="question-card-head">
@@ -107,7 +137,13 @@ export function AskPage() {
                   </div>
                 )}
                 {question.status !== "closed" && (
-                  <button className="ghost-button" onClick={() => dispatch(closeQuestion(question.id))}>
+                  <button
+                    className="ghost-button"
+                    onClick={() => {
+                      dispatch(closeQuestion(question.id));
+                      toast.success("Question marked resolved");
+                    }}
+                  >
                     Mark resolved
                   </button>
                 )}

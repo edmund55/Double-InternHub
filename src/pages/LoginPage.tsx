@@ -1,6 +1,9 @@
 import {
   ArrowRight,
   CheckCircle2,
+  Eye,
+  EyeOff,
+  LoaderCircle,
   LockKeyhole,
   Mail,
   ShieldCheck,
@@ -18,6 +21,8 @@ export function LoginPage() {
   const firstIntern = users.find((user) => user.role === "intern") ?? users[0];
   const [email, setEmail] = useState(firstIntern?.email ?? "");
   const [password, setPassword] = useState(firstIntern?.password ?? "");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isSigningIn, setIsSigningIn] = useState(false);
   const [error, setError] = useState("");
   const matchedUser = useMemo(
     () =>
@@ -26,10 +31,12 @@ export function LoginPage() {
       ),
     [email, users],
   );
-  const canSubmit = email.trim().length > 0 && password.length > 0;
+  const canSubmit =
+    email.trim().length > 0 && password.length > 0 && !isSigningIn;
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (isSigningIn) return;
     const user = users.find(
       (item) =>
         item.email.toLowerCase() === email.trim().toLowerCase() &&
@@ -37,21 +44,18 @@ export function LoginPage() {
     );
 
     if (!user) {
-      setError("Email or password does not match a prototype account.");
+      setError(
+        "Email or password is incorrect. Please check your details and try again.",
+      );
       return;
     }
 
     setError("");
-    dispatch(login(user.id));
-    navigate("/dashboard");
-  }
-
-  function fillAccount(userId: string) {
-    const user = users.find((item) => item.id === userId);
-    if (!user) return;
-    setEmail(user.email);
-    setPassword(user.password);
-    setError("");
+    setIsSigningIn(true);
+    window.setTimeout(() => {
+      dispatch(login(user.id));
+      navigate("/dashboard");
+    }, 450);
   }
 
   return (
@@ -85,6 +89,7 @@ export function LoginPage() {
               onChange={(event) => {
                 setEmail(event.target.value);
                 setError("");
+                setIsSigningIn(false);
               }}
               placeholder="name@double.my"
               autoComplete="email"
@@ -96,17 +101,31 @@ export function LoginPage() {
               <LockKeyhole size={16} />
               Password
             </span>
-            <input
-              type="password"
-              value={password}
-              onChange={(event) => {
-                setPassword(event.target.value);
-                setError("");
-              }}
-              placeholder="Enter password"
-              autoComplete="current-password"
-              aria-invalid={Boolean(error)}
-            />
+            <div className="password-field">
+              <input
+                type={isPasswordVisible ? "text" : "password"}
+                value={password}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                  setError("");
+                  setIsSigningIn(false);
+                }}
+                placeholder="Enter password"
+                autoComplete="current-password"
+                aria-invalid={Boolean(error)}
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setIsPasswordVisible((visible) => !visible)}
+                aria-label={
+                  isPasswordVisible ? "Hide password" : "Show password"
+                }
+                title={isPasswordVisible ? "Hide password" : "Show password"}
+              >
+                {isPasswordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </label>
 
           {error && (
@@ -131,47 +150,22 @@ export function LoginPage() {
           )}
 
           <button className="primary-button login-submit" disabled={!canSubmit}>
-            Sign in
-            <ArrowRight size={18} />
+            {isSigningIn ? (
+              <>
+                <LoaderCircle className="spin-icon" size={18} />
+                Signing in...
+              </>
+            ) : (
+              <>
+                Sign in
+                <ArrowRight size={18} />
+              </>
+            )}
           </button>
         </form>
-
-        <div className="demo-accounts" aria-label="Prototype demo accounts">
-          <div className="demo-accounts-head">
-            <div>
-              <strong>Prototype accounts</strong>
-              <span>Use these credentials for the Assignment 2 demo.</span>
-            </div>
-            <ShieldCheck size={22} />
-          </div>
-          <div className="demo-account-grid">
-            {users.map((user) => (
-              <button
-                type="button"
-                className={
-                  matchedUser?.id === user.id
-                    ? "demo-account demo-account-active"
-                    : "demo-account"
-                }
-                key={user.id}
-                onClick={() => fillAccount(user.id)}
-              >
-                <img src={user.avatarUrl} alt="" />
-                <div>
-                  <strong>
-                    {user.role === "intern" ? user.track : "Supervisor"}
-                  </strong>
-                  <span>{user.email}</span>
-                  <code>{user.password}</code>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
       </section>
       <section className="login-visual" aria-hidden="true">
         <div className="login-visual-content">
-          <span>High-fidelity alpha prototype</span>
           <strong>4 role-based workspaces</strong>
           <p>
             Frontend, backend, QA, and supervisor users can move through

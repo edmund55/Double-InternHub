@@ -14,6 +14,9 @@ import { formatDateTime, getInternProgress } from "../utils/progress";
 
 export function InternDashboard() {
   const currentUserId = useAppSelector((state) => state.auth.currentUserId)!;
+  const currentUser = useAppSelector((state) =>
+    state.hub.users.find((user) => user.id === currentUserId),
+  );
   const steps = useAppSelector((state) => state.hub.onboardingSteps);
   const progressRecords = useAppSelector((state) => state.hub.progressRecords);
   const questions = useAppSelector((state) =>
@@ -36,6 +39,8 @@ export function InternDashboard() {
   const answered = questions
     .filter((question) => question.status === "answered")
     .slice(0, 3);
+  const nextStep = pending[0];
+  const openQuestions = questions.filter((question) => question.status === "open");
 
   return (
     <section className="page">
@@ -49,6 +54,34 @@ export function InternDashboard() {
           <ArrowRight size={18} />
         </Link>
       </div>
+
+      <article className="welcome-panel">
+        <div>
+          <span className="eyebrow">Today&apos;s priority</span>
+          <h2>
+            {nextStep
+              ? `Continue ${nextStep.title}`
+              : `Great work${currentUser ? `, ${currentUser.name.split(" ")[0]}` : ""}`}
+          </h2>
+          <p>
+            {nextStep
+              ? `${nextStep.summary} This module usually takes ${nextStep.estimatedMinutes} minutes.`
+              : "Your onboarding modules are complete. Keep an eye on announcements and supervisor replies."}
+          </p>
+        </div>
+        <div className="welcome-actions">
+          {nextStep && (
+            <Link
+              className="primary-button"
+              to={`/intern/onboarding/${nextStep.id}`}
+            >
+              Open next step
+              <ArrowRight size={18} />
+            </Link>
+          )}
+          <span>{openQuestions.length} open questions</span>
+        </div>
+      </article>
 
       <div className="stats-grid">
         <StatCard
@@ -138,6 +171,13 @@ export function InternDashboard() {
               <h2>Pending setup</h2>
             </div>
             <div className="stack-list">
+              {pending.length === 0 && (
+                <div className="empty-state">
+                  <CheckCircle2 size={22} />
+                  <strong>All modules are complete</strong>
+                  <span>You can still revisit guides from the onboarding page.</span>
+                </div>
+              )}
               {pending.slice(0, 5).map((step) => (
                 <Link
                   key={step.id}
@@ -156,6 +196,13 @@ export function InternDashboard() {
               <h2>Announcements</h2>
             </div>
             <div className="stack-list">
+              {announcements.length === 0 && (
+                <div className="empty-state">
+                  <MessageSquare size={22} />
+                  <strong>No announcements yet</strong>
+                  <span>Team updates will appear here when posted.</span>
+                </div>
+              )}
               {announcements.slice(0, 3).map((announcement) => (
                 <div key={announcement.id} className="announcement-mini">
                   <strong>{announcement.title}</strong>
@@ -171,7 +218,11 @@ export function InternDashboard() {
             </div>
             <div className="stack-list">
               {answered.length === 0 && (
-                <p className="muted">No replies yet.</p>
+                <div className="empty-state">
+                  <MessageSquare size={22} />
+                  <strong>No replies yet</strong>
+                  <span>Supervisor responses will appear here after a question is answered.</span>
+                </div>
               )}
               {answered.map((question) => (
                 <Link

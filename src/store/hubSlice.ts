@@ -111,6 +111,7 @@ const hubSlice = createSlice({
           id: internId,
           name: action.payload.name,
           email: action.payload.email,
+          password: "Intern@2026",
           role: "intern",
           track: action.payload.track,
           supervisorId: action.payload.supervisorId,

@@ -463,6 +463,12 @@ export const faqs: FAQ[] = [
     answer:
       "No. Create a branch, open a merge request, and wait for review before merging.",
   },
+  {
+    id: "faq-3",
+    category: "VS Code",
+    question: "Which extensions is required to install before development?",
+    answer: "You will need to install ES Lint, and Prettier extension.",
+  },
 ];
 
 export const announcements: Announcement[] = [

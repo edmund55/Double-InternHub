@@ -1,4 +1,4 @@
-import { Check, ExternalLink } from "lucide-react";
+import { Check, CheckCircle2, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Badge, progressTone } from "../components/Badge";
 import { ProgressBar } from "../components/ProgressBar";
@@ -12,6 +12,10 @@ export function OnboardingPlanPage() {
   const steps = useAppSelector((state) => state.hub.onboardingSteps);
   const records = useAppSelector((state) => state.hub.progressRecords);
   const progress = getInternProgress(currentUserId, records, steps);
+  const nextRecord =
+    progress.records.find((record) => record.status === "in-progress") ??
+    progress.records.find((record) => record.status === "not-started");
+  const nextStep = steps.find((step) => step.id === nextRecord?.stepId);
 
   return (
     <section className="page">
@@ -23,18 +27,56 @@ export function OnboardingPlanPage() {
         <ProgressBar value={progress.percent} label="Total completion" />
       </div>
 
+      <article className="welcome-panel compact-welcome">
+        <div>
+          <span className="eyebrow">Guided setup</span>
+          <h2>
+            {nextStep
+              ? `Recommended next: ${nextStep.title}`
+              : "All setup modules completed"}
+          </h2>
+          <p>
+            {nextStep
+              ? "Open the learning guide first, then mark the module done after you complete the required setup."
+              : "You can still open any module to review documents, links, and setup notes."}
+          </p>
+        </div>
+        <div className="welcome-actions">
+          <Badge label={`${progress.done} done`} tone="green" />
+          <Badge
+            label={`${progress.pending} pending`}
+            tone={progress.pending ? "yellow" : "green"}
+          />
+        </div>
+      </article>
+
       <div className="tool-grid">
-        {steps.map((step) => {
+        {steps.map((step, index) => {
           const record = progress.records.find(
             (item) => item.stepId === step.id,
           )!;
           return (
-            <article className="tool-card" key={step.id}>
+            <article
+              className={
+                record.status === "done"
+                  ? "tool-card tool-card-done"
+                  : "tool-card"
+              }
+              key={step.id}
+            >
               <img src={step.imageUrl} alt="" />
+              {record.status === "done" && (
+                <div className="tool-card-complete">
+                  <CheckCircle2 size={16} />
+                  Completed
+                </div>
+              )}
               <div className="tool-card-body">
                 <div className="panel-heading">
                   <div>
-                    <span className="eyebrow">{step.category}</span>
+                    <span className="eyebrow">
+                      Module {index + 1} / {step.category}
+                    </span>
                     <h2>{step.title}</h2>
                   </div>
                   <Badge
@@ -43,6 +85,11 @@ export function OnboardingPlanPage() {
                   />
                 </div>
                 <p>{step.summary}</p>
+                <div className="tool-card-meta">
+                  <span>{step.estimatedMinutes} min</span>
+                  <span>{step.documents.length} docs</span>
+                  <span>{step.links.length} links</span>
+                </div>
                 <div className="inline-actions">
                   <Link
                     className="secondary-button"
@@ -53,6 +100,7 @@ export function OnboardingPlanPage() {
                   </Link>
                   <button
                     className="primary-button"
+                    disabled={record.status === "done"}
                     onClick={() =>
                       dispatch(
                         markStepStatus({
@@ -64,7 +112,7 @@ export function OnboardingPlanPage() {
                     }
                   >
                     <Check size={16} />
-                    Mark done
+                    {record.status === "done" ? "Completed" : "Mark done"}
                   </button>
                 </div>
               </div>

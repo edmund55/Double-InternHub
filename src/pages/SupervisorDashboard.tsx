@@ -14,6 +14,13 @@ export function SupervisorDashboard() {
   const average = getAverageProgress(interns, records, steps);
   const openQuestions = questions.filter((question) => question.status === "open");
   const completedInterns = interns.filter((intern) => getInternProgress(intern.id, records, steps).percent === 100).length;
+  const priorityIntern = interns
+    .map((intern) => ({
+      intern,
+      progress: getInternProgress(intern.id, records, steps),
+      openQuestions: openQuestions.filter((question) => question.internId === intern.id).length,
+    }))
+    .sort((a, b) => b.openQuestions - a.openQuestions || a.progress.percent - b.progress.percent)[0];
 
   return (
     <section className="page">
@@ -23,6 +30,26 @@ export function SupervisorDashboard() {
           <h1>Intern progress overview</h1>
         </div>
       </div>
+
+      <article className="welcome-panel supervisor-welcome">
+        <div>
+          <span className="eyebrow">Review priority</span>
+          <h2>
+            {priorityIntern
+              ? `${priorityIntern.intern.name} needs the next check-in`
+              : "No active interns yet"}
+          </h2>
+          <p>
+            {priorityIntern
+              ? `${priorityIntern.intern.track} onboarding is at ${priorityIntern.progress.percent}% with ${priorityIntern.openQuestions} open questions.`
+              : "Add interns from Management to begin tracking onboarding progress."}
+          </p>
+        </div>
+        <div className="welcome-actions">
+          <Badge label={`${openQuestions.length} open questions`} tone={openQuestions.length ? "red" : "green"} />
+          <Badge label={`${average}% average progress`} tone="blue" />
+        </div>
+      </article>
 
       <div className="stats-grid">
         <StatCard label="Active interns" value={interns.length} detail="Across Frontend, Backend, and QA" icon={Users} />
@@ -34,7 +61,10 @@ export function SupervisorDashboard() {
       <article className="panel supervisor-progress-panel">
         <div className="panel-heading">
           <h2>Progress by intern</h2>
-          <Badge label={`${steps.length} modules`} tone="blue" />
+          <div className="panel-heading-actions">
+            <Badge label={`${steps.length} modules`} tone="blue" />
+            <Badge label={`${completedInterns} complete`} tone="green" />
+          </div>
         </div>
         <div className="table-wrap">
           <table>

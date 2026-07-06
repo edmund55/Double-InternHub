@@ -39,6 +39,8 @@ export function AppLayout() {
 
   if (!user) return null;
   const nav = user.role === "intern" ? internNav : supervisorNav;
+  const workspaceLabel =
+    user.role === "intern" ? `${user.track} workspace` : "Supervisor workspace";
 
   return (
     <div className="app-shell">
@@ -61,6 +63,8 @@ export function AppLayout() {
         <button
           className="ghost-button sidebar-logout"
           onClick={() => {
+            const shouldLogout = window.confirm("Log out of Double InternHub?");
+            if (!shouldLogout) return;
             dispatch(logout());
             navigate("/login");
           }}
@@ -72,6 +76,9 @@ export function AppLayout() {
 
       <main className="main-panel">
         <header className="topbar">
+          <div className="topbar-context">
+            <h3>{workspaceLabel}</h3>
+          </div>
           <div className="mobile-brand">
             <PanelLeft size={20} />
             <strong>Double InternHub</strong>
