@@ -7,7 +7,7 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
-  currentUserId: demoUsers[1]?.id ?? null,
+  currentUserId: null,
 };
 
 const authSlice = createSlice({

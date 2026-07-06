@@ -4,12 +4,13 @@ Complete Vite + React + TypeScript + Redux + React Router demo application for i
 
 ## Demo Accounts
 
-- Supervisor: `Aina Rahman`
-- Frontend Dev intern: `Daniel Tan`
-- Backend Dev intern: `Sofia Lim`
-- QA intern: `Amir Hakim`
+- Frontend Dev intern: `daniel@double.my` / `Frontend@2026`
+- Backend Dev intern: `sofia@double.my` / `Backend@2026`
+- QA intern: `amir@double.my` / `QA@2026`
+- Supervisor: `aina@double.my` / `Supervisor@2026`
 
-Use the login screen account selector to switch roles.
+Use the login screen email and password fields to switch roles. The account
+cards on the login page show the four prototype credentials for demo purposes.
 
 ## Features
 
